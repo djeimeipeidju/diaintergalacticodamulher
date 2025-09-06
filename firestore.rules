@@ -2,30 +2,55 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function isSignedIn() { return request.auth != null; }
+
+    // Dono absoluto (seu UID do /health.html)
+    function isOwner() {
+      return isSignedIn() && request.auth.uid in [
+        '6C0m5xQlwsh80sgwsiIA3zbdbVL2'
+      ];
+    }
+
+    // Admin = owner OU documento em /admins/{uid}
     function isAdmin() {
-      return request.auth != null
-        && request.auth.token.email in [
-          "s.e.t.i.inteligencia2@gmail.com",
-          "s.e.t.i.inteligencia3@gmail.com",
-          "djeimeipeidju@gmail.com"
-        ];
+      return isOwner() || exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
-    // Leitura pública de tudo
-    match /{document=**} {
-      allow read: if true;
+    // Gestão de admins (só o dono)
+    match /admins/{uid} {
+      allow read:   if isAdmin();
+      allow create: if isOwner() && request.resource.id == request.auth.uid;
+      allow update: if isOwner();
+      allow delete: if isOwner();
     }
 
-    // Escrever posts (criar/editar/apagar) — só admins
-    match /posts/{postId} {
-      allow create, update, delete: if isAdmin();
-      allow read: if true;
-
-      // Subcoleção de comentários
-      match /comments/{commentId} {
-        allow read: if true;
-        allow create, update, delete: if isAdmin();
-      }
+    // Health
+    match /_health/{docId} {
+      allow read:  if isSignedIn();
+      allow write: if isSignedIn()
+        && request.resource.data.keys().hasOnly(['at','by']);
     }
+
+    // Vídeo atual
+    match /posts/current {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['url'])
+        && request.resource.data.url is string;
+      allow delete: if false;
+    }
+
+    // Comentários do post atual
+    match /posts/current/comments/{commentId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasOnly(['text','author','createdAt'])
+        && request.resource.data.text is string
+        && request.resource.data.author == request.auth.token.email;
+      allow update, delete: if isAdmin();
+    }
+
+    // Negar o resto
+    match /{document=**} { allow read, write: if false; }
   }
 }

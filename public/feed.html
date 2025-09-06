@@ -1,66 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Feed — DIA INTERGALÁCTICO DA MULHER</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body class="bg">
-  <header class="site-header">
-    <h1 class="title">DIA INTERGALÁCTICO DA MULHER</h1>
-    <nav class="row gap-sm">
-      <a id="btnAdmin" class="pill pill-link" href="admin.html">Admin</a>
-      <button id="btnLogout" class="pill pill-danger">Sair</button>
-    </nav>
-  </header>
-
-  <main class="container grid">
-    <!-- COMPOSITOR: será ocultado para visitantes pelo feed.js -->
-    <section id="postComposer" class="card">
-      <h2>Novo post</h2>
-
-      <input id="videoUrl" class="input" type="url"
-             placeholder="URL de vídeo (YouTube/MP4) — opcional" />
-
-      <textarea id="postText" class="textarea"
-                placeholder="Escreva algo... (Enter envia / Shift+Enter quebra)"></textarea>
-
-      <div class="row gap-sm">
-        <input id="postFile" class="file" type="file" accept="image/*,video/*" />
-        <button id="btnPublish" class="btn">Publicar</button>
-      </div>
-
-      <p class="hint">Apenas administradores podem publicar. Visitantes veem em tempo real.</p>
-    </section>
-
-    <!-- LISTA DE POSTS (infinite feed) -->
-    <section class="card">
-      <div id="posts" class="stack"></div>
-      <div class="center">
-        <button id="btnMore" class="btn btn-ghost">Carregar mais</button>
-      </div>
-      <p class="emulator-banner">Running in emulator mode. Do not use with production credentials.</p>
-    </section>
-
-    <!-- PAINEL DE COMENTÁRIOS -->
-    <aside class="card">
-      <h2>Comentários</h2>
-      <p class="muted">Selecione uma publicação para ver os comentários.</p>
-
-      <div id="commentsPane" class="stack"></div>
-
-      <textarea id="commentText" class="textarea"
-                placeholder="Escreva um comentário... (Enter envia / Shift+Enter quebra)"></textarea>
-
-      <div class="row gap-sm">
-        <input id="commentFile" class="file" type="file" accept="image/*,video/*" />
-        <button id="btnSendComment" class="btn">Enviar</button>
-      </div>
-    </aside>
-  </main>
-
-  <script type="module" src="firebase-init.js"></script>
-  <script type="module" src="feed.js"></script>
-</body>
-</html>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Feed — DIA INTERGALÁCTICO</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background:#fff; color:#111; }
+    header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 16px; border-bottom:1px solid #e5e5e5;
+    }
+    #who { font-size:14px; opacity:.85; }
+    header button { padding:8px 12px; border:1px solid #ccc; border-radius:8px; background:#fff; cursor:pointer; }
+    .wrap {
+      display:grid; grid-template-columns: 3fr 2fr; /* 60/40 */
+      gap:16px; padding:16px; max-width:1300px; margin:0 auto;
+    }
+    /* Coluna do vídeo */
+    .video { width:100%; }
+    .ratio { position:relative; width:100%; padding-top:56.25%; border:1px solid #e5e5e5; border-radius:12px; overflow:hidden; background:#000; }
+    .ratio > .fill { position:absolute; inset:0; width:100%; height:100%; }
+    .hint { margin-top:8px; font-size:14px; color:#555; }
+    /* Coluna dos comentários (caixa única) */
+    .comments { width:100%; }
+    .box {
+      border:1px solid #e5e5e5; border-radius:12px; padding:12px; background:#fafafa;
+      display:flex; flex-direction:column; gap:10px; height:100%;
+    }
+    .box h2 { margin:0 0 4px 0; font-size:18px; }
+    .list {
+      border:1px solid #eee; background:#fff; border-radius:10px; padding:8px;
+      /* Exatamente 4 itens visíveis (overflow para o resto) */
+      height: 4 * 72px; /* cada item ~72px */
+      height: calc(4 * 72px);
+      overflow:auto;
+    }
+    .item { padding:8px; border-bottom:1px solid #f0f0f0; }
+    .item:last-child { border-bottom:none; }
+    .item small { display:block; color:#666; }
+    form { display:flex; gap:8px; }
+    textarea { flex:1; min-height:64px; padding:8px; border:1px solid #ccc; border-radius:10px; resize:vertical; }
+    .send { padding:8px 12px; border:1px solid #ccc; border-radius:10px; background:#fff; cursor:pointer; }
+    .muted { color:#666; font-siz

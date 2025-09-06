@@ -1,17 +1,20 @@
 [build]
-  publish = "."
+  publish = "public"
+  command = ""
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
 
-[[headers]]
+# (opcional) headers de cache
+[headers]
   for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-[[headers]]
+[headers]
   for = "/*.js"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"

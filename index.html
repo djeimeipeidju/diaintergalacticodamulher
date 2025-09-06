@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Entrar — DIA INTERGALÁCTICO</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1 class="blur-red">DIA INTERGALÁCTICO DA MULHER</h1>
+    </div>
+  </header>
+
+  <main class="centered">
+    <div class="card lg">
+      <h2>Área administrativa</h2>
+      <p class="muted">
+        Esta tela é só para <b>você e associados</b>.
+        Usuários comuns acessam o <a href="feed.html">feed público</a>.
+      </p>
+
+      <div class="stack">
+        <button class="btn" id="btnGoogle">Entrar com Google</button>
+
+        <div class="row">
+          <input id="email" type="email" placeholder="Seu e-mail" autocomplete="username" />
+          <input id="password" type="password" placeholder="Senha" autocomplete="current-password" />
+        </div>
+
+        <div class="row">
+          <button class="btn" id="btnLogin">Entrar com e-mail</button>
+          <button class="btn secondary" id="btnSignup">Cadastrar</button>
+        </div>
+
+        <p class="muted" style="margin-top:8px">
+          Dica (emulador): use um e-mail fake como <code>voce+dev@gmail.com</code> e uma senha simples.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Lista de admins disponível para a UI também -->
+  <script>
+    window.ADMIN_EMAILS = [
+      "s.e.t.i.inteligencia2@gmail.com",
+      "s.e.t.i.inteligencia3@gmail.com",
+      "djeimepeidju@gmail.com"
+    ];
+  </script>
+
+  <script src="firebase-config.js?v=2"></script>
+  <script type="module" src="firebase-init.js?v=2"></script>
+  <script type="module" src="index.js?v=2"></script>
+</body>
+</html>

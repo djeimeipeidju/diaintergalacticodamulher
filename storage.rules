@@ -1,0 +1,29 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in [
+          "s.e.t.i.inteligencia2@gmail.com",
+          "s.e.t.i.inteligencia3@gmail.com",
+          "djeimeipeidju@gmail.com"
+        ];
+    }
+
+    // Leitura pública de todos os arquivos
+    match /{allPaths=**} {
+      allow read: if true;
+    }
+
+    // Uploads de posts (imagens/vídeos)
+    match /uploads/{uid}/{fileName} {
+      allow write: if isAdmin();
+    }
+
+    // Uploads de anexos nos comentários
+    match /comments/{uid}/{fileName} {
+      allow write: if isAdmin();
+    }
+  }
+}

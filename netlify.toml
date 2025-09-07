@@ -2,19 +2,52 @@
   publish = "public"
   command = ""
 
+# Servir arquivos como arquivo (sem SPA)
+[[redirects]]
+  from = "/health.html"
+  to = "/health.html"
+  status = 200
+
+[[redirects]]
+  from = "/feed.html"
+  to = "/feed.html"
+  status = 200
+
+[[redirects]]
+  from = "/firebase-config.js"
+  to = "/firebase-config.js"
+  status = 200
+
+[[redirects]]
+  from = "/firebase-init.js"
+  to = "/firebase-init.js"
+  status = 200
+
+[[redirects]]
+  from = "/feed.js"
+  to = "/feed.js"
+  status = 200
+
+[[redirects]]
+  from = "/health.js"
+  to = "/health.js"
+  status = 200
+
+# Fallback SPA apenas quando NÃO existir arquivo
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
   force = false
 
-# (opcional) headers de cache
-[headers]
+# (opcional) cache — note o uso de [[headers]]
+[[headers]]
   for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-[headers]
+[[headers]]
   for = "/*.js"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
